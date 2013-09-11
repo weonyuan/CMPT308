@@ -1,4 +1,8 @@
-﻿-- Question 1
+﻿-- Queries Homework 1
+-- CMPT 308
+-- Weon Yuan
+
+-- Question 1
 -- List all data for all customers.
 select *
 from customers;
