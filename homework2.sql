@@ -97,15 +97,12 @@ order by name;
 
 -- 7. Find all customers who have the same discount as that of any
 -- customers in Dallas or Kyoto.
--- Output: Nothing; just as impossible as dividing by 0 infinity times
+-- Output: c002, c003, c004, c005, c006 and their respective data
 select *
 from customers
 where discount in (
 	select discount
-	from customers c1
-	where c1.city = 'Dallas' and c1.discount in (
-		select c2.discount
-		from customers c2
-		where c2.city = 'Kyoto'
-	)
+	from customers
+	where city = 'Dallas'
+	   or city = 'Kyoto'
 );
