@@ -66,8 +66,7 @@ where c.cid not in (
 -- Use an outer join.
 -- Output: Weyland-Yutani
 select c.name
-from customers c left outer join orders o
-  on c.cid = o.cid
+from customers c left outer join orders o on c.cid = o.cid
 where o.cid is null
 order by c.name;
 
@@ -86,8 +85,8 @@ group by c.name, a.name;
 -- 8. Get the names of customers and agents in the same city, along
 -- with the name of the city, regardless of whether or not the customer
 -- has ever placed an order with that agent.
--- Output: Tiptop and Otasi (Duluth), Basics and Smith (Dallas),
---         Allied and Smith (Dallas), ACME and Otasi (Duluth)
+-- Output: ACME and Otasi (Duluth), Allied and Smith (Dallas),
+--         Basics and Smith (Dallas), Tiptop and Otasi (Duluth)
 select c.name, a.name
 from customers c, agents a, orders o
 where c.city = a.city
@@ -97,34 +96,48 @@ group by c.name, a.name;
 -- 9. Get the name and city of customers who live in the city where
 -- the least number of products are made.
 -- Output: Tiptop (Duluth), ACME (Duluth)
--- FIX
 select c.name, c.city
 from customers c
 where c.city in (
 	select p.city
 	from products p
 	group by p.city
-	limit 2
-)
-group by c.name, c.city
-order by count(*) asc;
+	order by count(*) asc
+	limit 1
+);
 
 
 -- 10. Get the name and city of customers who live in a city where
 -- the most number of products are made.
 -- Output: Basics (Dallas), Allied (Dallas)
--- FIX
-select c.name, c.city, max(p.quantity)
-from customers c, products p
-where c.city = p.city
-group by c.city;
-
+select c.name, c.city
+from customers c
+where c.city in (
+	select p.city
+	from products p
+	group by p.city
+	order by count(*) desc
+	limit 1
+);
 
 
 -- 11. Get the name and city of customers who live in any city where
 -- the most number of products are made.
--- Output: Tiptop (Duluth), Basics (Dallas), Allied (Dallas), ACME (Duluth)
--- FIX
+-- Output: Basics (Dallas), Allied (Dallas)
+select c.name, c.city
+from customers c
+where c.city in (
+	select p1.city
+	from products p1
+	group by p1.city
+	having count(*) = (
+		select count(*)
+		from products p2
+		group by p2.city
+		order by count(*) desc
+		limit 1
+	)
+);
 
 
 -- 12. List the products whose priceUSD is above the average priceUSD.
@@ -142,8 +155,7 @@ having priceUSD > (select avg(priceUSD)
 -- 	   p02: Tiptop; p03: Basics, Basics, Tiptop; p04: Tiptop;
 -- 	   p05: Allied, Tiptop; p06: Tiptop; p07: Tiptop, ACME (Kyoto)
 select c.name, o.pid, o.dollars
-from customers c inner join orders o
-	on c.cid = o.cid
+from customers c inner join orders o on c.cid = o.cid
 order by o.pid asc, o.dollars desc;
 
 
@@ -161,18 +173,31 @@ order by c.name asc;
 -- 15. Show the names of all customers who bought products from agents
 -- based in New York along with the names of the products they ordered,
 -- and the names of the agents who sold it to them.
--- Output: Tiptop, Comb, Smith; Tiptop, Pencil, Gray;
---         ACME (Kyoto), Comb, Smith;
-
+-- Output: Tiptop, Comb, Smith; ACME (Kyoto), Comb, Smith;
+--         Tiptop, Pencil, Gray;
+select c.name, p.name, a.name
+from orders o inner join customers c on o.cid = c.cid
+	      inner join products p on o.pid = p.pid
+	      inner join agents a on o.aid = a.aid
+where a.city = 'New York';
 
 
 -- 16. Write a query to check the accuracy of the dollars column in the
 -- Orders table. This means calculating Orders.dollars from other data
 -- in other tables and then comparing those values to the values in
 -- Orders.dollars.
-
+-- Output: All orders in the Orders table should appear.
+select *
+from orders o inner join customers c on o.cid = c.cid
+	      inner join products p on o.pid = p.pid
+where o.dollars = (o.qty * p.priceUSD) * (1 - (c.discount / 100))
+order by o.ordno asc;
 
 
 -- 17. Create an error in the dollars column of the Orders table so
 -- that you can verify your accuracy checking query.
--- Output:
+-- Output: Ordno 1011 should disappear when you execute this update
+-- and the query on Question 16. Original value (o.dollars) was 450.
+update orders
+set dollars = 600
+where ordno = 1011;
