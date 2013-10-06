@@ -97,36 +97,65 @@ group by c.name, a.name;
 -- 9. Get the name and city of customers who live in the city where
 -- the least number of products are made.
 -- Output: Tiptop (Duluth), ACME (Duluth)
-
+-- FIX
+select c.name, c.city
+from customers c
+where c.city in (
+	select p.city
+	from products p
+	group by p.city
+	limit 2
+)
+group by c.name, c.city
+order by count(*) asc;
 
 
 -- 10. Get the name and city of customers who live in a city where
 -- the most number of products are made.
 -- Output: Basics (Dallas), Allied (Dallas)
+-- FIX
+select c.name, c.city, max(p.quantity)
+from customers c, products p
+where c.city = p.city
+group by c.city;
 
 
 
 -- 11. Get the name and city of customers who live in any city where
 -- the most number of products are made.
 -- Output: Tiptop (Duluth), Basics (Dallas), Allied (Dallas), ACME (Duluth)
-
+-- FIX
 
 
 -- 12. List the products whose priceUSD is above the average priceUSD.
 -- Output: Folder, Clip
+select name, avg(priceUSD)
+from products
+group by name
+having priceUSD > (select avg(priceUSD)
+			from products);
 
 
 -- 13. Show the customer name, pid ordered, and the dollars for all
 -- customer orders, sorted by dollars from high to low.
--- Output: p01: ACME (Kyoto), ACME (Duluth), Tiptop; p02: Tiptop;
---         p03: Basics, Tiptop; p04: Tiptop; p05: Allied, Tiptop;
---         p06: Tiptop; p07: Tiptop, ACME (Kyoto)
+-- Output: p01: ACME (Kyoto), ACME (Duluth), Tiptop, ACME (Kyoto);
+-- 	   p02: Tiptop; p03: Basics, Basics, Tiptop; p04: Tiptop;
+-- 	   p05: Allied, Tiptop; p06: Tiptop; p07: Tiptop, ACME (Kyoto)
+select c.name, o.pid, o.dollars
+from customers c inner join orders o
+	on c.cid = o.cid
+order by o.pid asc, o.dollars desc;
 
 
 -- 14. Show all customer names (in order) and their total ordered, and
 -- nothing more. Use coalesce to avoid showing NULLs.
 -- Output: ACME (Duluth and Kyoto), Allied, Basics, Tiptop
---         Weyland-Yutani and their total ordered amount.
+--         Weyland-Yutani and their total ordered quantity.
+select c.name, coalesce(sum(o.qty), 0)
+from customers c left outer join orders o
+	on c.cid = o.cid
+group by c.name
+order by c.name asc;
 
 
 -- 15. Show the names of all customers who bought products from agents
@@ -136,10 +165,12 @@ group by c.name, a.name;
 --         ACME (Kyoto), Comb, Smith;
 
 
+
 -- 16. Write a query to check the accuracy of the dollars column in the
 -- Orders table. This means calculating Orders.dollars from other data
 -- in other tables and then comparing those values to the values in
 -- Orders.dollars.
+
 
 
 -- 17. Create an error in the dollars column of the Orders table so
