@@ -164,8 +164,7 @@ order by o.pid asc, o.dollars desc;
 -- Output: ACME (Duluth and Kyoto), Allied, Basics, Tiptop
 --         Weyland-Yutani and their total ordered quantity.
 select c.name, coalesce(sum(o.qty), 0)
-from customers c left outer join orders o
-	on c.cid = o.cid
+from customers c left outer join orders o on c.cid = o.cid
 group by c.name
 order by c.name asc;
 
@@ -197,7 +196,7 @@ order by o.ordno asc;
 -- 17. Create an error in the dollars column of the Orders table so
 -- that you can verify your accuracy checking query.
 -- Output: Ordno 1011 should disappear when you execute this update
--- and the query on Question 16. Original value (o.dollars) was 450.
+-- and run the query on Question 16. Original value (o.dollars) was 450.
 update orders
 set dollars = 600
 where ordno = 1011;
