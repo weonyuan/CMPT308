@@ -175,7 +175,7 @@ order by o.pid asc, o.dollars desc;
 --         Weyland-Yutani and their total ordered quantity.
 select c.name, c.city, coalesce(sum(o.qty), 0) as "Total ordered"
 from customers c left outer join orders o on c.cid = o.cid
-group by c.name, c.cid
+group by c.name, c.city
 order by c.name asc;
 
 
