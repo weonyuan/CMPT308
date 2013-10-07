@@ -62,6 +62,7 @@ where c.cid not in (
 	from orders o
 );
 
+
 -- 6. Get the names of customers who have never placed an order.
 -- Use an outer join.
 -- Output: Weyland-Yutani
@@ -73,7 +74,7 @@ order by c.name;
 
 -- 7. Get the names of customers who placed at least one order through
 -- an agent in their city, along with those agent(s) names.
--- Output: Tiptop, Otasi
+-- Output: Tiptop and Otasi
 select c.name, a.name
 from customers c, agents a, orders o
 where c.city = a.city
@@ -96,6 +97,9 @@ group by c.name, a.name;
 -- 9. Get the name and city of customers who live in the city where
 -- the least number of products are made.
 -- Output: Tiptop (Duluth), ACME (Duluth)
+-- Note: Subquery will pull the cities, count the cities, and the
+-- 	 limit will select that one city that makes the least
+--	 number of products.
 select c.name, c.city
 from customers c
 where c.city in (
@@ -110,6 +114,9 @@ where c.city in (
 -- 10. Get the name and city of customers who live in a city where
 -- the most number of products are made.
 -- Output: Basics (Dallas), Allied (Dallas)
+-- Note: Subquery will pull the cities, count the cities, and the
+-- 	 limit will select that city that makes the most
+--	 number of products.
 select c.name, c.city
 from customers c
 where c.city in (
@@ -124,6 +131,9 @@ where c.city in (
 -- 11. Get the name and city of customers who live in any city where
 -- the most number of products are made.
 -- Output: Basics (Dallas), Allied (Dallas)
+-- Note: Subqueries will pull the cities, count the cities, and the
+-- 	 limit will select multiple cities that makes the least
+--	 number of products.
 select c.name, c.city
 from customers c
 where c.city in (
@@ -144,7 +154,7 @@ where c.city in (
 -- Output: Folder, Clip
 select name, avg(priceUSD)
 from products
-group by name
+group by name, priceUSD
 having priceUSD > (select avg(priceUSD)
 			from products);
 
@@ -163,7 +173,7 @@ order by o.pid asc, o.dollars desc;
 -- nothing more. Use coalesce to avoid showing NULLs.
 -- Output: ACME (Duluth and Kyoto), Allied, Basics, Tiptop
 --         Weyland-Yutani and their total ordered quantity.
-select c.name, coalesce(sum(o.qty), 0)
+select c.name, coalesce(sum(o.qty), 0) as "Total ordered"
 from customers c left outer join orders o on c.cid = o.cid
 group by c.name
 order by c.name asc;
