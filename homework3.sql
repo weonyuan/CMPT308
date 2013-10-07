@@ -171,11 +171,11 @@ order by o.pid asc, o.dollars desc;
 
 -- 14. Show all customer names (in order) and their total ordered, and
 -- nothing more. Use coalesce to avoid showing NULLs.
--- Output: ACME (Duluth and Kyoto), Allied, Basics, Tiptop
+-- Output: ACME (Duluth), ACME (Kyoto), Allied, Basics, Tiptop
 --         Weyland-Yutani and their total ordered quantity.
-select c.name, coalesce(sum(o.qty), 0) as "Total ordered"
+select c.name, c.city, coalesce(sum(o.qty), 0) as "Total ordered"
 from customers c left outer join orders o on c.cid = o.cid
-group by c.name
+group by c.name, c.cid
 order by c.name asc;
 
 
