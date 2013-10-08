@@ -132,7 +132,7 @@ where c.city in (
 -- the most number of products are made.
 -- Output: Basics (Dallas), Allied (Dallas)
 -- Note: Subqueries will pull the cities, count the cities, and the
--- 	 limit will select multiple cities that makes the most
+-- 	 limit will select a city out of multiple cities that makes the most
 --	 number of products.
 select c.name, c.city
 from customers c
