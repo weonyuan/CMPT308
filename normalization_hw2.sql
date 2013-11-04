@@ -161,7 +161,7 @@ insert into MoviesDirected (movieID, directorID)
 	values (5, 8);
 
 
--- Query: Directors who worked actor Sean Connery --
+-- Query: Directors who worked with actor Sean Connery --
 select distinct p.firstName, p.lastName
 from People p, Directors d, Movies m, MoviesDirected md
 where d.directorID = md.directorID
