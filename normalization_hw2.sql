@@ -70,6 +70,9 @@ insert into People (firstName, lastName, address)
 	values ('Guy', 'Hamilton', '2112 Bond Dr.');
 
 insert into People (firstName, lastName, address)
+	values ('Lewis', 'Gilbert', '1007 Yolt St.');
+
+insert into People (firstName, lastName, address)
 	values ('Peter', 'Segal', '45 Kingston Ave.');
 
 insert into People (firstName, lastName, address)
@@ -98,13 +101,16 @@ insert into Directors (directorID, filmSchoolAttended, guildAnniversary)
 	values (5, 'None', '1952-06-13');
 
 insert into Directors (directorID, filmSchoolAttended, guildAnniversary)
-	values (6, 'None', '1994-10-16');
+	values (6, 'None', '1945-03-12');
 
 insert into Directors (directorID, filmSchoolAttended, guildAnniversary)
-	values (7, 'Dartmouth College', '2002-11-03');
+	values (7, 'None', '1994-10-16');
 
 insert into Directors (directorID, filmSchoolAttended, guildAnniversary)
-	values (8, 'Dartmouth College', '2002-08-16');
+	values (8, 'Dartmouth College', '2002-11-03');
+
+insert into Directors (directorID, filmSchoolAttended, guildAnniversary)
+	values (9, 'Dartmouth College', '2002-08-16');
 
 
 -- Inserting data in Movies table --
@@ -116,6 +122,15 @@ insert into Movies (name, yearReleased, domesticBoxOffice, foreignBoxOffice, hom
 
 insert into Movies (name, yearReleased, domesticBoxOffice, foreignBoxOffice, homeMediaSales)
 	values ('Goldfinger', 1964, 51100000.00, 73800000.00, 49500000.00);
+
+insert into Movies (name, yearReleased, domesticBoxOffice, foreignBoxOffice, homeMediaSales)
+	values ('Thunderball', 1965, 63600000.00, 77600000.00, 34500000.00);
+
+insert into Movies (name, yearReleased, domesticBoxOffice, foreignBoxOffice, homeMediaSales)
+	values ('You Only Live Twice', 1967, 43100000.00, 68500000.00, 50200000.00);
+
+insert into Movies (name, yearReleased, domesticBoxOffice, foreignBoxOffice, homeMediaSales)
+	values ('Diamonds Are Forever', 1971, 43800000.00, 72200000.00, 70070000.00);
 
 insert into Movies (name, yearReleased, domesticBoxOffice, foreignBoxOffice, homeMediaSales)
 	values ('Get Smart', 2008, 130319208.00, 98423705.00, 35597138.00);
@@ -135,10 +150,19 @@ insert into MoviesActed (movieID, actorID)
 	values (3, 1);
 
 insert into MoviesActed (movieID, actorID)
-	values (4, 2);
+	values (4, 1);
 
 insert into MoviesActed (movieID, actorID)
-	values (5, 3);
+	values (5, 1);
+
+insert into MoviesActed (movieID, actorID)
+	values (6, 1);
+
+insert into MoviesActed (movieID, actorID)
+	values (7, 2);
+
+insert into MoviesActed (movieID, actorID)
+	values (8, 3);
 
 
 -- Inserting data in MoviesDirected table --
@@ -152,13 +176,22 @@ insert into MoviesDirected (movieID, directorID)
 	values (3, 5);
 
 insert into MoviesDirected (movieID, directorID)
-	values (4, 6);
+	values (4, 4);
 
 insert into MoviesDirected (movieID, directorID)
-	values (5, 7);
+	values (5, 6);
 
 insert into MoviesDirected (movieID, directorID)
-	values (5, 8);
+	values (6, 5);
+
+insert into MoviesDirected (movieID, directorID)
+	values (7, 7);
+
+insert into MoviesDirected (movieID, directorID)
+	values (8, 8);
+
+insert into MoviesDirected (movieID, directorID)
+	values (8, 9);
 
 
 -- Query: Directors who worked with actor Sean Connery --
